@@ -23,6 +23,7 @@ class GUI():
         self.nombre = self.ruta_l[self.tam_l-1]
         cv.imshow(self.nombre, self.imagen)
         cv.waitKey(0)
+        cv.destroyAllWindows()
     
     def traslacion(self, ancho, alto):
         nueva_img = self.imagen
@@ -38,6 +39,7 @@ class GUI():
         cv.imwrite(nombre, img_trasladada)
         cv.imshow(nombre, img_trasladada)
         cv.waitKey(0)
+        cv.destroyAllWindows()
         
     def rotacion(self, grados, tam):
         nueva_img = self.imagen
@@ -50,6 +52,7 @@ class GUI():
         cv.imwrite(nombre, img_rotada)
         cv.imshow(nombre, img_rotada)
         cv.waitKey(0)
+        cv.destroyAllWindows()
     
     def escalado(self, escala):
         nueva_img = self.imagen
@@ -59,6 +62,7 @@ class GUI():
         cv.imwrite(nombre, img_escalada)
         cv.imshow(nombre, img_escalada)
         cv.waitKey(0)
+        cv.destroyAllWindows()
     
     def recortar(self, col_i, col_f, fila_i, fila_f):
         nueva_img = self.imagen
@@ -68,6 +72,7 @@ class GUI():
         cv.imwrite(nombre, img_recortada)
         cv.imshow(nombre, img_recortada)
         cv.waitKey(0)
+        cv.destroyAllWindows()
     
     def grises(self):
         nueva_img = self.imagen
@@ -78,25 +83,73 @@ class GUI():
         cv.imwrite(nombre, img_grises)
         cv.imshow(nombre, img_grises)
         cv.waitKey(0)
+        cv.destroyAllWindows()
         
     def canales(self):
+        print('Ruta del archivo ', self.ruta_archivo)
         nueva_img = self.imagen
+        alto = nueva_img.shape[0]
+        ancho = nueva_img.shape[1]
+        
         img_b = nueva_img[:, :, 0]
         img_g = nueva_img[:, :, 1]
         img_r = nueva_img[:, :, 2]
-        
+
         nombre_l = self.nombre.split('.')
+        
         nombre = nombre_l[0] + '_BGR'
-        nombre_b = nombre[0] + '_B.jpg'
-        nombre_g = nombre[0] + '_G.jpg'
-        nombre_r = nombre[0] + '_R.jpg'
-        print('Ruta del archivo ', self.ruta_archivo)
+        nombre_b = nombre_l[0] + '_B.jpg'
+        nombre_g = nombre_l[0] + '_G.jpg'
+        nombre_r = nombre_l[0] + '_R.jpg'
+        
+        nombre_b1 = nombre_l[0] + '_b.jpg'
+        nombre_g1 = nombre_l[0] + '_g.jpg'
+        nombre_r1 = nombre_l[0] + '_r.jpg'
+        
+        zeroImgMatrix = np.zeros((alto, ancho), dtype="uint8")
+        
+        (b,g,r) = cv.split(nueva_img)
+        b = cv.merge([b, zeroImgMatrix, zeroImgMatrix])
+        g = cv.merge([zeroImgMatrix, g, zeroImgMatrix])
+        r = cv.merge([zeroImgMatrix, zeroImgMatrix, r])
+        
         cv.imwrite(nombre_b, img_b)
         cv.imwrite(nombre_g, img_g)
         cv.imwrite(nombre_r, img_r)
-        cv.imshow(nombre, np.hstack([img_b, img_g, img_r]))
-        cv.waitKey(0)
         
+        # cv.imshow(nombre_b, img_b) #Se obtiene la imagen en el canal B y su visualización es en escala a grises
+        # cv.imshow(nombre_g, img_g) #Se obtiene la imagen en el canal G y su visualización es en escala a grises
+        # cv.imshow(nombre_r, img_r) #Se obtiene la imagen en el canal R y su visualización es en escala a grises
+        
+        cv.imshow(nombre_b1, b)
+        cv.imshow(nombre_g1, g)
+        cv.imshow(nombre_r1, r)
+
+        cv.waitKey(0)
+        cv.destroyAllWindows()
+    
+    def umbralizacion(self, umbral):
+        nueva_img = self.imagen
+        img_grises = cv.cvtColor(nueva_img, cv.COLOR_BGR2GRAY)
+        _, img_binaria = cv.threshold(img_grises, umbral, 255, cv.THRESH_BINARY)
+        nombre_l = self.nombre.split('.')
+        nombre = nombre_l[0] + '_Umbralizada.jpg'
+        cv.imshow(nombre, img_binaria)
+        cv.imwrite(nombre, img_binaria)
+        cv.waitKey(0)
+        cv.destroyAllWindows()
+        
+    def invertir(self, umbral):
+        nueva_img = self.imagen
+        img_grises = cv.cvtColor(nueva_img, cv.COLOR_BGR2GRAY)
+        _, img_binaria = cv.threshold(img_grises, umbral, 255, cv.THRESH_BINARY_INV)
+        nombre_l = self.nombre.split('.')
+        nombre = nombre_l[0] + '_Umbralizada_Inv.jpg'
+        cv.imshow(nombre, img_binaria)
+        cv.imwrite(nombre, img_binaria)
+        cv.waitKey(0)
+        cv.destroyAllWindows()
+    
     def __init__(self):
         self.color_base = '#24264F'
         self.color_fuente = '#FFFFFF'
@@ -158,6 +211,12 @@ class GUI():
         
         self.btnFile = Button(self.frame1, text='Recortar', bg=self.color_base, fg=self.color_fuente, command= lambda: self.recortar(int(self.columnas.get()), int(self.columnas1.get()), int(self.filas.get()), int(self.filas1.get())))
         self.btnFile.place(x=35,y=240)
+        
+        self.btnFile = Button(self.frame1, text='Umbralizar', bg=self.color_base, fg=self.color_fuente, command= lambda: self.umbralizacion(int(self.columnas.get())))
+        self.btnFile.place(x=35,y=280)
+        
+        self.btnFile = Button(self.frame1, text='Umbralizar Inv', bg=self.color_base, fg=self.color_fuente, command= lambda: self.invertir(int(self.columnas.get())))
+        self.btnFile.place(x=35,y=320)
         
         #############################
         
