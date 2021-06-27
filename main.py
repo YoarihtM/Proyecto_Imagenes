@@ -188,15 +188,23 @@ class GUI():
         
         self.columnas = Entry(self.frame1, width=5)
         self.columnas.place(x=390,y=120)
+        self.lblcol = Label(self.frame1, text='valor 1', bg=self.color_base, fg=self.color_fuente)
+        self.lblcol.place(x=335,y=120)
         
         self.filas = Entry(self.frame1, width=5)
         self.filas.place(x=390,y=150)
+        self.lblfila = Label(self.frame1, text='valor 2', bg=self.color_base, fg=self.color_fuente)
+        self.lblfila.place(x=335,y=150)
         
         self.columnas1 = Entry(self.frame1, width=5)
         self.columnas1.place(x=390,y=180)
+        self.lblcol1 = Label(self.frame1, text='valor 3', bg=self.color_base, fg=self.color_fuente)
+        self.lblcol1.place(x=335,y=180)
         
         self.filas1 = Entry(self.frame1, width=5)
         self.filas1.place(x=390,y=210)
+        self.lblfil1 = Label(self.frame1, text='valor 4', bg=self.color_base, fg=self.color_fuente)
+        self.lblfil1.place(x=335,y=210)
         
         ############ Operaciones que necesitan de los entrys ##############
         
