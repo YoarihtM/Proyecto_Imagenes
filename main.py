@@ -150,6 +150,26 @@ class GUI():
         cv.waitKey(0)
         cv.destroyAllWindows()
     
+    def contornos(self, umbral):
+        nueva_img = self.imagen
+        img_grises = cv.cvtColor(nueva_img, cv.COLOR_BGR2GRAY)
+        _, img_binaria = cv.threshold(img_grises, umbral, 255, cv.THRESH_BINARY_INV)
+        
+        contornos,_ = cv.findContours(img_binaria, cv.RETR_LIST, cv.CHAIN_APPROX_SIMPLE)
+        
+        nombre_l = self.nombre.split('.')
+        nombre = nombre_l[0] + '_Contornos.jpg'
+        
+        cv.drawContours(nueva_img, contornos, -1, (255,0,0), 2)
+        cv.imshow(nombre, nueva_img)
+        cv.imwrite(nombre, nueva_img)
+        cv.waitKey(0)
+        
+        # for i in range(num_contornos):
+        
+        cv.destroyAllWindows()
+    
+    
     def __init__(self):
         self.color_base = '#24264F'
         self.color_fuente = '#FFFFFF'
@@ -208,23 +228,26 @@ class GUI():
         
         ############ Operaciones que necesitan de los entrys ##############
         
-        self.btnFile = Button(self.frame1, text='Traslación', bg=self.color_base, fg=self.color_fuente, command= lambda: self.traslacion(int(self.columnas.get()), int(self.filas.get())))
+        self.btnFile = Button(self.frame1, text='Traslación', bg=self.color_base, fg=self.color_fuente, command= lambda: self.traslacion(float(self.columnas.get()), float(self.filas.get())))
         self.btnFile.place(x=35,y=120)
         
-        self.btnFile = Button(self.frame1, text='Rotación', bg=self.color_base, fg=self.color_fuente, command= lambda: self.rotacion(int(self.columnas.get()), int(self.filas.get())))
+        self.btnFile = Button(self.frame1, text='Rotación', bg=self.color_base, fg=self.color_fuente, command= lambda: self.rotacion(float(self.columnas.get()), float(self.filas.get())))
         self.btnFile.place(x=35,y=160)
         
-        self.btnFile = Button(self.frame1, text='Escalar', bg=self.color_base, fg=self.color_fuente, command= lambda: self.escalado(int(self.columnas.get())))
+        self.btnFile = Button(self.frame1, text='Escalar', bg=self.color_base, fg=self.color_fuente, command= lambda: self.escalado(float(self.columnas.get())))
         self.btnFile.place(x=35,y=200)
         
-        self.btnFile = Button(self.frame1, text='Recortar', bg=self.color_base, fg=self.color_fuente, command= lambda: self.recortar(int(self.columnas.get()), int(self.columnas1.get()), int(self.filas.get()), int(self.filas1.get())))
+        self.btnFile = Button(self.frame1, text='Recortar', bg=self.color_base, fg=self.color_fuente, command= lambda: self.recortar(float(self.columnas.get()), float(self.columnas1.get()), float(self.filas.get()), float(self.filas1.get())))
         self.btnFile.place(x=35,y=240)
         
-        self.btnFile = Button(self.frame1, text='Umbralizar', bg=self.color_base, fg=self.color_fuente, command= lambda: self.umbralizacion(int(self.columnas.get())))
+        self.btnFile = Button(self.frame1, text='Umbralizar', bg=self.color_base, fg=self.color_fuente, command= lambda: self.umbralizacion(float(self.columnas.get())))
         self.btnFile.place(x=35,y=280)
         
-        self.btnFile = Button(self.frame1, text='Umbralizar Inv', bg=self.color_base, fg=self.color_fuente, command= lambda: self.invertir(int(self.columnas.get())))
+        self.btnFile = Button(self.frame1, text='Umbralizar Inv', bg=self.color_base, fg=self.color_fuente, command= lambda: self.invertir(float(self.columnas.get())))
         self.btnFile.place(x=35,y=320)
+        
+        self.btnContornos = Button(self.frame1, text='Contornos', bg=self.color_base, fg=self.color_fuente, command= lambda: self.contornos(float(self.columnas.get())))
+        self.btnContornos.place(x=200,y=200)
         
         #############################
         
