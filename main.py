@@ -81,7 +81,21 @@ class GUI():
         
     def canales(self):
         nueva_img = self.imagen
-        # img_b, img_g, img_r = cv.
+        img_b = nueva_img[:, :, 0]
+        img_g = nueva_img[:, :, 1]
+        img_r = nueva_img[:, :, 2]
+        
+        nombre_l = self.nombre.split('.')
+        nombre = nombre_l[0] + '_BGR'
+        nombre_b = nombre[0] + '_B.jpg'
+        nombre_g = nombre[0] + '_G.jpg'
+        nombre_r = nombre[0] + '_R.jpg'
+        print('Ruta del archivo ', self.ruta_archivo)
+        cv.imwrite(nombre_b, img_b)
+        cv.imwrite(nombre_g, img_g)
+        cv.imwrite(nombre_r, img_r)
+        cv.imshow(nombre, np.hstack([img_b, img_g, img_r]))
+        cv.waitKey(0)
         
     def __init__(self):
         self.color_base = '#24264F'
@@ -111,10 +125,11 @@ class GUI():
         
         ############# Operaciones que no usan entrys #############
         
-        self.btnFile = Button(self.frame1, text='Grises', bg=self.color_base, fg=self.color_fuente, command=self.grises)
-        self.btnFile.place(x=200,y=120)
+        self.btnGris = Button(self.frame1, text='Grises', bg=self.color_base, fg=self.color_fuente, command=self.grises)
+        self.btnGris.place(x=200,y=120)
         
-        
+        self.btnCanales = Button(self.frame1, text='BGR', bg=self.color_base, fg=self.color_fuente, command=self.canales)
+        self.btnCanales.place(x=200,y=160)
         
         ############# Entrys ############
         
