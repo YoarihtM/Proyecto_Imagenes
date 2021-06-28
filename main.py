@@ -27,8 +27,8 @@ class GUI():
     
     def traslacion(self, ancho, alto):
         nueva_img = self.imagen
-        ancho_img = nueva_img.shape[0] #numero de columnas
-        alto_img = nueva_img.shape[1] #numero de filas
+        ancho_img = nueva_img.shape[0] 
+        alto_img = nueva_img.shape[1] 
         M = np.float32([
             [1,0,ancho],
             [0,1,alto]
@@ -169,6 +169,107 @@ class GUI():
         
         cv.destroyAllWindows()
     
+    def erosion(self, umbral, iteraciones):
+        kernel = np.ones((3,3), np.uint8)
+        
+        nueva_img = self.imagen
+        img_grises = cv.cvtColor(nueva_img, cv.COLOR_BGR2GRAY)
+        _, img_binaria = cv.threshold(img_grises, umbral, 255, cv.THRESH_BINARY)
+        
+        img_erosion = cv.erode(img_binaria, kernel, iterations=iteraciones)
+        
+        nombre_l = self.nombre.split('.')
+        nombre = nombre_l[0] + '_erosion.jpg'
+        
+        cv.imshow(nombre, img_erosion)
+        cv.imwrite(nombre, img_erosion)
+        cv.waitKey(0)
+        cv.destroyAllWindows()
+    
+    def dilatacion(self, umbral, iteraciones):
+        kernel = np.ones((3,3), np.uint8)
+        
+        nueva_img = self.imagen
+        img_grises = cv.cvtColor(nueva_img, cv.COLOR_BGR2GRAY)
+        _, img_binaria = cv.threshold(img_grises, umbral, 255, cv.THRESH_BINARY)
+        
+        img_dilatacion = cv.dilate(img_binaria, kernel, iterations=iteraciones)
+        
+        nombre_l = self.nombre.split('.')
+        nombre = nombre_l[0] + '_dilatacion.jpg'
+        
+        cv.imshow(nombre, img_dilatacion)
+        cv.imwrite(nombre, img_dilatacion)
+        cv.waitKey(0)
+        cv.destroyAllWindows()
+        
+    def apertura(self, umbral):
+        kernel = np.ones((3,3), np.uint8)
+        
+        nueva_img = self.imagen
+        img_grises = cv.cvtColor(nueva_img, cv.COLOR_BGR2GRAY)
+        _, img_binaria = cv.threshold(img_grises, umbral, 255, cv.THRESH_BINARY)
+        
+        img_apertura = cv.morphologyEx(img_binaria, cv.MORPH_OPEN, kernel)
+        
+        nombre_l = self.nombre.split('.')
+        nombre = nombre_l[0] + '_apertura.jpg'
+        
+        cv.imshow(nombre, img_apertura)
+        cv.imwrite(nombre, img_apertura)
+        cv.waitKey(0)
+        cv.destroyAllWindows()
+        
+    def cierre(self, umbral):
+        kernel = np.ones((3,3), np.uint8)
+        
+        nueva_img = self.imagen
+        img_grises = cv.cvtColor(nueva_img, cv.COLOR_BGR2GRAY)
+        _, img_binaria = cv.threshold(img_grises, umbral, 255, cv.THRESH_BINARY)
+        
+        img_cierre = cv.morphologyEx(img_binaria, cv.MORPH_CLOSE, kernel)
+        
+        nombre_l = self.nombre.split('.')
+        nombre = nombre_l[0] + '_cierre.jpg'
+        
+        cv.imshow(nombre, img_cierre)
+        cv.imwrite(nombre, img_cierre)
+        cv.waitKey(0)
+        cv.destroyAllWindows()
+    
+    def gradiente(self, umbral):
+        kernel = np.ones((3,3), np.uint8)
+        
+        nueva_img = self.imagen
+        img_grises = cv.cvtColor(nueva_img, cv.COLOR_BGR2GRAY)
+        _, img_binaria = cv.threshold(img_grises, umbral, 255, cv.THRESH_BINARY)
+        
+        img_gradiente = cv.morphologyEx(img_binaria, cv.MORPH_GRADIENT, kernel)
+        
+        nombre_l = self.nombre.split('.')
+        nombre = nombre_l[0] + '_gradienteMorfologico.jpg'
+        
+        cv.imshow(nombre, img_gradiente)
+        cv.imwrite(nombre, img_gradiente)
+        cv.waitKey(0)
+        cv.destroyAllWindows()
+    
+    def hitmiss(self, umbral):
+        kernel = np.ones((3,3), np.uint8)
+        
+        nueva_img = self.imagen
+        img_grises = cv.cvtColor(nueva_img, cv.COLOR_BGR2GRAY)
+        _, img_binaria = cv.threshold(img_grises, umbral, 255, cv.THRESH_BINARY)
+        
+        img_hitmiss = cv.morphologyEx(img_binaria, cv.MORPH_HITMISS, kernel)
+        
+        nombre_l = self.nombre.split('.')
+        nombre = nombre_l[0] + '_hit&miss.jpg'
+        
+        cv.imshow(nombre, img_hitmiss)
+        cv.imwrite(nombre, img_hitmiss)
+        cv.waitKey(0)
+        cv.destroyAllWindows()
     
     def __init__(self):
         self.color_base = '#24264F'
@@ -208,7 +309,7 @@ class GUI():
         
         self.columnas = Entry(self.frame1, width=5)
         self.columnas.place(x=390,y=120)
-        self.lblcol = Label(self.frame1, text='valor 1', bg=self.color_base, fg=self.color_fuente)
+        self.lblcol = Label(self.frame1, text='valor 1', bg=self.color_base, fg=self.color_fuente) 
         self.lblcol.place(x=335,y=120)
         
         self.filas = Entry(self.frame1, width=5)
@@ -248,6 +349,24 @@ class GUI():
         
         self.btnContornos = Button(self.frame1, text='Contornos', bg=self.color_base, fg=self.color_fuente, command= lambda: self.contornos(float(self.columnas.get())))
         self.btnContornos.place(x=200,y=200)
+        
+        self.btnContornos = Button(self.frame1, text='Erosión', bg=self.color_base, fg=self.color_fuente, command= lambda: self.erosion(float(self.columnas.get()), int(self.filas.get())))
+        self.btnContornos.place(x=200,y=240)
+        
+        self.btnContornos = Button(self.frame1, text='Dilatación', bg=self.color_base, fg=self.color_fuente, command= lambda: self.dilatacion(float(self.columnas.get()), int(self.filas.get())))
+        self.btnContornos.place(x=200,y=280)
+        
+        self.btnContornos = Button(self.frame1, text='Apertura', bg=self.color_base, fg=self.color_fuente, command= lambda: self.apertura(float(self.columnas.get())))
+        self.btnContornos.place(x=200,y=320)
+        
+        self.btnContornos = Button(self.frame1, text='Cierre', bg=self.color_base, fg=self.color_fuente, command= lambda: self.cierre(float(self.columnas.get())))
+        self.btnContornos.place(x=335,y=240)
+        
+        self.btnContornos = Button(self.frame1, text='Gradiente', bg=self.color_base, fg=self.color_fuente, command= lambda: self.gradiente(float(self.columnas.get())))
+        self.btnContornos.place(x=335,y=280)
+
+        self.btnContornos = Button(self.frame1, text='Hit-&-Miss', bg=self.color_base, fg=self.color_fuente, command= lambda: self.hitmiss(float(self.columnas.get())))
+        self.btnContornos.place(x=335,y=320)
         
         #############################
         
